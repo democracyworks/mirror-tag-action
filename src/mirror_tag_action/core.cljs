@@ -43,8 +43,7 @@
        (try
          (println (<p! (.. octokit -git (updateRef update-args))))
          (catch :default e
-           (prn e)
-           (if (= e "Reference does not exist")
+           (if (= (.-message e) "Reference does not exist")
              (do
                (println (str "Branch " dest-branch "does not exist. Creating it."))
                (println (<p! (.. octokit -git (createRef update-args)))))
@@ -52,7 +51,6 @@
 
        (println (str "Set branch " dest-branch " to " sha)))
      (catch :default e
-       (prn e)
        (.setFailed core e)))))
 
 (defn -main []
