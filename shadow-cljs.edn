@@ -2,5 +2,5 @@
 {:source-paths ["src"]
  :builds
  {:app {:target :node-script
-        :output-to "dist/main.js"
+        :output-to "main.js"
         :main mirror-tag-action.core/-main}}}
