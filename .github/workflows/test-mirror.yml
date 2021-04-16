@@ -16,4 +16,4 @@ jobs:
         uses: ./
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          dest: 'test-mirror'
+          dest: 'test-mirror-create'
