@@ -43,10 +43,12 @@
        (try
          (println (<p! (.. octokit -git (updateRef update-args))))
          (catch :default e
+           (prn e)
+           (prn (.-message e))
            (if (= (.-message e) "Reference does not exist")
              (do
-               (println (str "Branch " dest-branch "does not exist. Creating it."))
-               (println (<p! (.. octokit -git (createRef update-args)))))
+               (prn (str "Branch " dest-branch "does not exist. Creating it."))
+               (prn (<p! (.. octokit -git (createRef update-args)))))
              (throw (js/Error.)))))
 
        (println (str "Set branch " dest-branch " to " sha)))
