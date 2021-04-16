@@ -33,6 +33,8 @@
                                    :force true})
                            clj->js)]
 
+       (prn update-args)
+
        (when (not= "commit" ref-type)
          (throw (js/Error. "Expected ref to be a commit. Got a " ref-type)))
 
@@ -41,6 +43,7 @@
        (try
          (println (<p! (.. octokit -git (updateRef update-args))))
          (catch :default e
+           (prn e)
            (if (= e "Reference does not exist")
              (do
                (println (str "Branch " dest-branch "does not exist. Creating it."))
@@ -49,6 +52,7 @@
 
        (println (str "Set branch " dest-branch " to " sha)))
      (catch :default e
+       (prn e)
        (.setFailed core e)))))
 
 (defn -main []
