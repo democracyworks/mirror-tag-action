@@ -21,6 +21,7 @@
                        :tag tag})
            _ (println ref-args)
            ref-resp (js->clj (<p! (.. octokit -git (getRef ref-args))))
+           _ (println ref-resp)
            ref-type (get-in ref-resp ["data" "object" "type"])
            sha (get-in ref-resp ["data" "object" "sha"])
            update-args (-> repo-context
@@ -35,12 +36,12 @@
        (println (str "Pushing tag " tag " (" sha ") to branch " dest-branch))
 
        (try
-         (<p! (.. octokit -git (updateRef update-args)))
+         (println (<p! (.. octokit -git (updateRef update-args))))
          (catch :default e
            (if (= e "Reference does not exist")
              (do
                (println (str "Branch " dest-branch "does not exist. Creating it."))
-               (<p! (.. octokit -git (createRef update-args))))
+               (println (<p! (.. octokit -git (createRef update-args)))))
              (throw (js/Error.)))))
 
        (println (str "Set branch " dest-branch " to " sha)))
