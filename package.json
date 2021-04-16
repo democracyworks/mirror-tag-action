@@ -5,6 +5,11 @@
   "devDependencies": {
     "shadow-cljs": "2.12.5"
   },
+  "scripts": {
+    "watch": "shadow-cljs watch app",
+    "compile": "shadow-cljs compile app",
+    "build": "shadow-cljs release app"
+  },
   "dependencies": {
     "@actions/core": "^1.2.7",
     "@actions/github": "^4.0.0",

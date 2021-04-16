@@ -4,12 +4,21 @@
             ["@actions/core" :as core]
             ["@actions/github" :as github]))
 
+(defn get-ref [^js octokit args]
+  (js->clj (<p! (.. octokit -git (getRef args)))))
+
+(defn update-ref [^js octokit args]
+  (js->clj (<p! (.. octokit -git (updateRef args)))))
+
+(defn create-ref [^js octokit args]
+  (js->clj (<p! (.. octokit -git (createRef args)))))
+
 (defn start []
   (go
    (try
      (let [gh-token (.getInput core "github-token")
            dest-branch (.getInput core "dest")
-           ^js octokit (.getOctokit github gh-token)
+           octokit (.getOctokit github gh-token)
            ref (.. js/process -env -GITHUB_REF)
            tag (second (re-find #"refs/tags/([^&]*)" ref))
            repo-context (js->clj (.. github -context -repo))
@@ -20,7 +29,7 @@
                        :ref ref
                        :tag tag})
            _ (println ref-args)
-           ref-resp (js->clj (<p! (.. octokit -rest -git (getRef ref-args))))
+           ref-resp (create-ref octokit ref-args)
            _ (println ref-resp)
            _ (prn ref-resp)
            ref-type (get-in ref-resp ["data" "object" "type"])
@@ -43,14 +52,14 @@
        (prn octokit)
 
        (try
-         (println (<p! (.. octokit -rest -git (updateRef update-args))))
+         (println (update-ref octokit update-args))
          (catch :default e
            (prn e)
            (prn (.-message e))
            (if (= (.-message e) "Reference does not exist")
              (do
                (prn (str "Branch " dest-branch "does not exist. Creating it."))
-               (prn (<p! (.. octokit -rest -git (createRef update-args)))))
+               (prn (create-ref octokit update-args)))
              (throw (js/Error.)))))
 
        (println (str "Set branch " dest-branch " to " sha)))
