@@ -22,16 +22,19 @@
            _ (println ref-args)
            ref-resp (js->clj (<p! (.. octokit -git (getRef ref-args))))
            _ (println ref-resp)
+           _ (prn ref-resp)
            ref-type (get-in ref-resp ["data" "object" "type"])
            sha (get-in ref-resp ["data" "object" "sha"])
+           _ (println ref-type)
+           _ (println sha)
            update-args (-> repo-context
                            (merge {:ref (str "refs/heads/" dest-branch)
                                    :sha sha
                                    :force true})
                            clj->js)]
 
-       (when (not= "tag" ref-type)
-         (throw (js/Error. "Expected ref to be a tag. Got a " ref-type)))
+       (when (not= "commit" ref-type)
+         (throw (js/Error. "Expected ref to be a commit. Got a " ref-type)))
 
        (println (str "Pushing tag " tag " (" sha ") to branch " dest-branch))
 
