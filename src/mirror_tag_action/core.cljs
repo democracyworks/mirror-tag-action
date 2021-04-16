@@ -53,7 +53,9 @@
          (catch :default e
            (prn e)
            (prn (.-message e))
-           (if (= (.-message e) "Reference does not exist")
+           (prn (.. e .-cause))
+           (prn (.. e .-cause .-message))
+           (if (= (.. e .-cause .-message) "Reference does not exist")
              (do
                (prn (str "Branch " dest-branch "does not exist. Creating it."))
                (prn (js->clj (<p! (create-ref octokit update-args)))))
