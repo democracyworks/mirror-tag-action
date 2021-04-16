@@ -16,6 +16,7 @@
            ref-args (-> repo-context
                         (merge {:ref (str "tags/" tag)})
                         clj->js)
+           _ (println ref-args)
            ref-resp (js->clj (<p! (.. octokit -git (getRef ref-args))))
            ref-type (get-in ref-resp ["data" "object" "type"])
            sha (get-in ref-resp ["data" "object" "sha"])
