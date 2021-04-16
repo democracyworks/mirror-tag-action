@@ -1,0 +1,19 @@
+{
+  "name": "mirror-tag-action",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "shadow-cljs": "2.12.5"
+  },
+  "scripts": {
+    "watch": "shadow-cljs watch app",
+    "compile": "shadow-cljs compile app",
+    "build": "shadow-cljs release app; ncc build main.js --minify"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.7",
+    "@actions/github": "^4.0.0",
+    "@vercel/ncc": "^0.28.3",
+    "source-map-support": "^0.5.19"
+  }
+}

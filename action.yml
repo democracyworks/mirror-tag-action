@@ -1,0 +1,12 @@
+name: 'Mirror Branch'
+description: 'Mirror a source branch to a destination branch within the same repository'
+inputs:
+  github-token:
+    description: 'This should be `secrets.GITHUB_TOKEN`.'
+    required: true
+  dest:
+    description: 'Name of the destination branch'
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

@@ -1,0 +1,6 @@
+;; shadow-cljs configuration
+{:source-paths ["src"]
+ :builds
+ {:app {:target :node-script
+        :output-to "main.js"
+        :main mirror-tag-action.core/-main}}}
