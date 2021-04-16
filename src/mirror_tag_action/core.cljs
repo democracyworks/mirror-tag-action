@@ -9,7 +9,7 @@
    (try
      (let [gh-token (.getInput core "github-token")
            dest-branch (.getInput core "dest")
-           octokit (.getOctokit github gh-token)
+           ^js octokit (.getOctokit github gh-token)
            ref (.. js/process -env -GITHUB_REF)
            tag (second (re-find #"refs/tags/([^&]*)" ref))
            repo-context (js->clj (.. github -context -repo))
@@ -40,7 +40,7 @@
 
        (println (str "Pushing tag " tag " (" sha ") to branch " dest-branch))
 
-       (prn octo)
+       (prn octokit)
 
        (try
          (println (<p! (.. octokit -rest -git (updateRef update-args))))
