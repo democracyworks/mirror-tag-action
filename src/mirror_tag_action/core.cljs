@@ -4,10 +4,9 @@
             ["@actions/core" :as core]
             ["@actions/github" :as github]))
 
+;; create wrapper fns for octokit methods to get around externs issues
 (defn get-ref [^js octokit args] (.. octokit -git (getRef args)))
-
 (defn update-ref [^js octokit args] (.. octokit -git (updateRef args)))
-
 (defn create-ref [^js octokit args] (.. octokit -git (createRef args)))
 
 (defn start []
@@ -22,43 +21,27 @@
            ref-args (-> repo-context
                         (merge {:ref (str "tags/" tag)})
                         clj->js)
-           _ (println {:dest-branch dest-branch
-                       :ref ref
-                       :tag tag})
-           _ (println ref-args)
            ref-resp (js->clj (<p! (get-ref octokit ref-args)))
-           _ (println ref-resp)
-           _ (prn ref-resp)
            ref-type (get-in ref-resp ["data" "object" "type"])
            sha (get-in ref-resp ["data" "object" "sha"])
-           _ (println ref-type)
-           _ (println sha)
            update-args (-> repo-context
                            (merge {:ref (str "refs/heads/" dest-branch)
                                    :sha sha
                                    :force true})
                            clj->js)]
 
-       (prn update-args)
-
        (when (not= "commit" ref-type)
          (throw (js/Error. "Expected ref to be a commit. Got a " ref-type)))
 
        (println (str "Pushing tag " tag " (" sha ") to branch " dest-branch))
 
-       (prn octokit)
-
        (try
-         (println (js->clj (<p! (update-ref octokit update-args))))
+         (<p! (update-ref octokit update-args))
          (catch :default e
-           (prn e)
-           (prn (.-message e))
-           (prn (.. e -cause))
-           (prn (.. e -cause -message))
            (if (= (.. e -cause -message) "Reference does not exist")
              (do
-               (prn (str "Branch " dest-branch "does not exist. Creating it."))
-               (prn (js->clj (<p! (create-ref octokit update-args)))))
+               (println (str "Branch " dest-branch "does not exist. Creating it."))
+               (<p! (create-ref octokit update-args)))
              (throw (js/Error.)))))
 
        (println (str "Set branch " dest-branch " to " sha)))
