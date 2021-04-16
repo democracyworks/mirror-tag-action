@@ -25,7 +25,7 @@
            ref-type (get-in ref-resp ["data" "object" "type"])
            sha (get-in ref-resp ["data" "object" "sha"])
            update-args (-> repo-context
-                           (merge {:ref (str "refs/heads/" dest-branch)
+                           (merge {:ref (str "heads/" dest-branch)
                                    :sha sha
                                    :force true})
                            clj->js)]
@@ -42,7 +42,7 @@
          (catch :default e
            (if (= (.. e -cause -message) "Reference does not exist")
              (do
-               (println (str "Branch " dest-branch "does not exist. Creating it."))
+               (println (str "Branch " dest-branch " does not exist. Creating it."))
                (<p! (create-ref octokit update-args)))
              (throw (js/Error.)))))
 
