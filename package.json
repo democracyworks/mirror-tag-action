@@ -1,0 +1,13 @@
+{
+  "name": "mirror-tag-action",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "shadow-cljs": "2.12.5"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.7",
+    "@actions/github": "^4.0.0",
+    "source-map-support": "^0.5.19"
+  }
+}

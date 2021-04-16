@@ -1,0 +1,19 @@
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  mirror_job:
+    runs-on: ubuntu-latest
+    name: Mirror tags to test-mirror branch
+    steps:
+      # Must checkout to address the action in the current repository.
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Mirror action step
+        id: mirror
+        uses: ./
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          dest: 'test-mirror'
