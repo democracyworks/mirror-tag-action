@@ -11,7 +11,7 @@
            dest-branch (.getInput core "dest")
            octokit (.getOctokit github gh-token)
            ref (.. js/process -env -GITHUB_REF)
-           tag (second (re-find #"/refs/tags/([^&]*)" ref))
+           tag (second (re-find #"refs/tags/([^&]*)" ref))
            repo-context (js->clj (.. github -context -repo))
            ref-args (-> repo-context
                         (merge {:ref (str "tags/" tag)})
