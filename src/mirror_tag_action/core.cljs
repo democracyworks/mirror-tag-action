@@ -32,8 +32,6 @@
 
        (println (str "Pushing tag " tag " (" sha ") to branch " dest-branch))
 
-       (prn update-args)
-
        (try
          (<p! (update-ref octokit update-args))
          (catch :default e
